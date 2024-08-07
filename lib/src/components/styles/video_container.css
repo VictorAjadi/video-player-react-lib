@@ -1,0 +1,285 @@
+/* Import Bootstrap's CSS */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+/* Additional custom styles for your components */
+*,*::before,*::after{
+  box-sizing: border-box;
+}
+body{
+  margin: 0;
+}
+.video-container{
+  width: 90%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: center;
+  margin-inline: auto;
+}
+.video-controls-container{
+  z-index: 100;
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+  color: white;
+  cursor: alias;
+}
+.video-controls-container .controls button{
+  opacity: .85;
+  transition: opacity 150ms ease-in-out;
+  cursor: pointer;
+  transition: all 300ms ease-in-out;
+}
+.video-controls-container .controls button:hover{
+opacity: 1;
+}
+.video-container:hover .video-controls-container,
+.video-container:focus-within .video-controls-container,
+.video-container.paused .video-controls-container{
+  opacity: 1;
+  cursor: pointer;
+}
+.video-controls-container::before{
+  content: "";
+  position: absolute;
+  bottom: 0;
+  background:  linear-gradient(to top,rgba(0, 0, 0, .75), transparent);
+  width: 100%;
+  aspect-ratio: 6 / 1;
+  z-index: -1;
+  pointer-events: none;
+}
+.video-container.theater,.video-container.fullscreen{
+   width: 100%;
+  max-width: initial;
+}
+.video-container.theater{
+  max-height: 90vh;
+  transition: all 600ms ease-in-out;
+}
+.video-container.fullscreen{
+  max-height: 100vh;
+  transition: all 600ms ease-in-out;
+}
+.volume-slider{
+  width: 0;
+  transition: all 150ms ease-in-out;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.video-container:hover .volume-slider,.volume-slider:focus-within{
+  width: 100px;
+  transform: scaleX(1);
+}
+.timeline-container{
+  height: 7px;
+  margin-inline: .5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.timeline{
+  background-color: rgba(100, 100, 100, .5);
+  height: 3px;
+  width: 100%;
+  position: relative;
+}
+.timeline::before{
+content: "";
+position: absolute;
+left: 0;
+top: 0;
+bottom: 0;
+right: calc(100% - var(--preview-position) * 100%);
+background-color: rgb(150, 150, 150);
+display: none;
+}
+.timeline::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: calc(100% - var(--progress-position) * 100%);
+  background-color: red;
+}
+.timeline .thumb-indicator{
+  --scale: 0;
+  height: 200%;
+  transform: translateX(-50%) scale(var(--scale));
+  position: absolute;
+  top: -50%;
+  left: calc(var(--progress-position) * 100%);
+  background-color: red;
+  border-radius: 50%;
+  transition: transform 50ms ease-in-out;
+  aspect-ratio: 1 / 1;
+}
+
+.timeline .preview-img{
+  position: absolute;
+  height: 80px;
+  aspect-ratio: 16 / 9;
+  top: -1rem;
+  transform: translate(-50%, -100%);
+  left: calc(var(--preview-position)* 100%);
+  border-radius: .25rem;
+  border: 2px solid white;
+  display: none;
+}
+
+.thumb-img{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+/* .video-container.scrubbing .thumbnail-img {
+  display: block;
+} */
+.video-container.scrubbing .preview-img,
+.timeline-container:hover .preview-img{
+display: block;
+}
+.video-container.scrubbing .timeline::before,
+.timeline-container:hover .timeline::before{
+  display: block;
+}
+.video-container.scrubbing .thumb-indicator,
+.timeline-container:hover .thumb-indicator {
+  --scale: 1;
+}
+.video-container.scrubbing .timeline,
+.timeline-container:hover .timeline{
+  height: 100%;
+}
+.quality-button {
+  position: absolute;
+  top: -135px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.quality-container {
+  position: relative;
+}
+.quality-container .quality-btn{
+  z-index: 1;
+}
+.controls #fullscreenProp::before
+{
+  content: 'fullscreen (f)';
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: -25px;
+  right: -1px;
+  background: rgba(255, 255, 255, 0.875);
+  color: black;
+  border-radius: 5%;
+  padding: 2px 5px;
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+  visibility: hidden;
+}
+
+.controls #theaterProp::before{
+  content: 'theater mode (t)';
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: -25px;
+  right: 70px;
+  background: rgba(255, 255, 255, 0.875);
+  color: black;
+  border-radius: 5%;
+  padding: 2px 5px;
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+  visibility: hidden;
+}
+.controls #pipProp::before{
+  content: 'picture in picture';
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: -25px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.875);
+  color: black;
+  border-radius: 5%;
+  padding: 2px 5px;
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+  visibility: hidden;
+}
+.controls #speedProp::before{
+  content: 'playback speed';
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: -25px;
+  right: 110px;
+  background: rgba(255, 255, 255, 0.875);
+  color: black;
+  border-radius: 5%;
+  padding: 2px 5px;
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+  visibility: hidden;
+}
+.controls #captionProp::before{
+  content: 'add subtitle';
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: -25px;
+  right: 125px;
+  background: rgba(255, 255, 255, 0.875);
+  color: black;
+  border-radius: 5%;
+  padding: 2px 5px;
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+  visibility: hidden;
+}
+.controls #play_pause_button::before{
+  content: 'play/pause';
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: -25px;
+  left: -1px;
+  background: rgba(255, 255, 255, 0.875);
+  color: black;
+  border-radius: 5%;
+  padding: 2px 5px;
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+  visibility: hidden;
+}
+#big-pause-play,#fastforward,#backforward{
+  transition: all 600ms ease-in-out;
+  opacity: 0;
+}
+.controls #fullscreenProp:hover::before,
+.controls #pipProp:hover::before,
+.controls #theaterProp:hover:before,
+.controls #speedProp:hover::before,
+.controls #captionProp:hover::before,
+.controls #play_pause_button:hover::before
+{
+  opacity: 1;
+  visibility: visible;
+}
+.video-container:hover #big-pause-play,
+.video-container:hover #fastforward,
+.video-container:hover #backforward
+{
+  opacity: 1;
+  display: block;
+}
